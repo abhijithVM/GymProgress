@@ -1,180 +1,85 @@
-import { Image } from 'expo-image';
-import { SymbolView } from 'expo-symbols';
-import { Platform, Pressable, ScrollView, StyleSheet } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 
-import { ExternalLink } from '@/components/external-link';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Collapsible } from '@/components/ui/collapsible';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
-import { useTheme } from '@/hooks/use-theme';
+const recentSessions = [
+  { day: 'MON', title: 'Pull day', duration: '52 min', volume: '7,840 kg', color: '#DDEBC9' },
+  { day: 'SAT', title: 'Leg day', duration: '61 min', volume: '10,120 kg', color: '#F2DFC5' },
+  { day: 'THU', title: 'Push day', duration: '47 min', volume: '6,980 kg', color: '#D8E6E9' },
+];
 
-export default function TabTwoScreen() {
-  const safeAreaInsets = useSafeAreaInsets();
-  const insets = {
-    ...safeAreaInsets,
-    bottom: safeAreaInsets.bottom + BottomTabInset + Spacing.three,
-  };
-  const theme = useTheme();
-
-  const contentPlatformStyle = Platform.select({
-    android: {
-      paddingTop: insets.top,
-      paddingLeft: insets.left,
-      paddingRight: insets.right,
-      paddingBottom: insets.bottom,
-    },
-    web: {
-      paddingTop: Spacing.six,
-      paddingBottom: Spacing.four,
-    },
-  });
-
+export default function ProgressScreen() {
   return (
-    <ScrollView
-      style={[styles.scrollView, { backgroundColor: theme.background }]}
-      contentInset={insets}
-      contentContainerStyle={[styles.contentContainer, contentPlatformStyle]}>
-      <ThemedView style={styles.container}>
-        <ThemedView style={styles.titleContainer}>
-          <ThemedText type="subtitle">Explore</ThemedText>
-          <ThemedText style={styles.centerText} themeColor="textSecondary">
-            This starter app includes example{'\n'}code to help you get started.
-          </ThemedText>
+    <SafeAreaView style={styles.safeArea}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.content}>
+        <Text style={styles.eyebrow}>YOUR TRAINING</Text>
+        <Text style={styles.title}>Progress</Text>
+        <Text style={styles.subtitle}>A look at the work you&apos;re putting in.</Text>
 
-          <ExternalLink href="https://docs.expo.dev" asChild>
-            <Pressable style={({ pressed }) => pressed && styles.pressed}>
-              <ThemedView type="backgroundElement" style={styles.linkButton}>
-                <ThemedText type="link">Expo documentation</ThemedText>
-                <SymbolView
-                  tintColor={theme.text}
-                  name={{ ios: 'arrow.up.right.square', android: 'link', web: 'link' }}
-                  size={12}
-                />
-              </ThemedView>
-            </Pressable>
-          </ExternalLink>
-        </ThemedView>
+        <View style={styles.streakCard}>
+          <View>
+            <Text style={styles.streakNumber}>8</Text>
+            <Text style={styles.streakLabel}>DAY STREAK</Text>
+          </View>
+          <View style={styles.streakCopy}>
+            <Text style={styles.streakTitle}>You&apos;re building momentum.</Text>
+            <Text style={styles.streakBody}>One more workout this week to hit your goal.</Text>
+          </View>
+          <Text style={styles.streakFlame}>✦</Text>
+        </View>
 
-        <ThemedView style={styles.sectionsWrapper}>
-          <Collapsible title="File-based routing">
-            <ThemedText type="small">
-              This app has two screens: <ThemedText type="code">src/app/index.tsx</ThemedText> and{' '}
-              <ThemedText type="code">src/app/explore.tsx</ThemedText>
-            </ThemedText>
-            <ThemedText type="small">
-              The layout file in <ThemedText type="code">src/app/_layout.tsx</ThemedText> sets up
-              the tab navigator.
-            </ThemedText>
-            <ExternalLink href="https://docs.expo.dev/router/introduction">
-              <ThemedText type="linkPrimary">Learn more</ThemedText>
-            </ExternalLink>
-          </Collapsible>
+        <Text style={styles.sectionTitle}>Strength trend</Text>
+        <View style={styles.chartCard}>
+          <View style={styles.chartHeader}><Text style={styles.chartLabel}>BENCH PRESS</Text><Text style={styles.chartValue}>80 kg</Text></View>
+          <View style={styles.chartArea}>
+            {[48, 67, 59, 76, 72, 88, 100].map((height, index) => <View key={index} style={[styles.bar, { height: `${height}%` }, index === 6 && styles.activeBar]} />)}
+          </View>
+          <View style={styles.chartFooter}><Text style={styles.chartAxis}>APR 07</Text><Text style={styles.chartGain}>+12.5 kg</Text><Text style={styles.chartAxis}>MAY 12</Text></View>
+        </View>
 
-          <Collapsible title="Android, iOS, and web support">
-            <ThemedView type="backgroundElement" style={styles.collapsibleContent}>
-              <ThemedText type="small">
-                You can open this project on Android, iOS, and the web. To open the web version,
-                press <ThemedText type="smallBold">w</ThemedText> in the terminal running this
-                project.
-              </ThemedText>
-              <Image
-                source={require('@/assets/images/tutorial-web.png')}
-                style={styles.imageTutorial}
-              />
-            </ThemedView>
-          </Collapsible>
-
-          <Collapsible title="Images">
-            <ThemedText type="small">
-              For static images, you can use the <ThemedText type="code">@2x</ThemedText> and{' '}
-              <ThemedText type="code">@3x</ThemedText> suffixes to provide files for different
-              screen densities.
-            </ThemedText>
-            <Image source={require('@/assets/images/react-logo.png')} style={styles.imageReact} />
-            <ExternalLink href="https://reactnative.dev/docs/images">
-              <ThemedText type="linkPrimary">Learn more</ThemedText>
-            </ExternalLink>
-          </Collapsible>
-
-          <Collapsible title="Light and dark mode components">
-            <ThemedText type="small">
-              This template has light and dark mode support. The{' '}
-              <ThemedText type="code">useColorScheme()</ThemedText> hook lets you inspect what the
-              user&apos;s current color scheme is, and so you can adjust UI colors accordingly.
-            </ThemedText>
-            <ExternalLink href="https://docs.expo.dev/develop/user-interface/color-themes/">
-              <ThemedText type="linkPrimary">Learn more</ThemedText>
-            </ExternalLink>
-          </Collapsible>
-
-          <Collapsible title="Animations">
-            <ThemedText type="small">
-              This template includes an example of an animated component. The{' '}
-              <ThemedText type="code">src/components/ui/collapsible.tsx</ThemedText> component uses
-              the powerful <ThemedText type="code">react-native-reanimated</ThemedText> library to
-              animate opening this hint.
-            </ThemedText>
-          </Collapsible>
-        </ThemedView>
-        {Platform.OS === 'web' && <WebBadge />}
-      </ThemedView>
-    </ScrollView>
+        <View style={styles.sectionHeader}><Text style={styles.sectionTitle}>Recent workouts</Text><Text style={styles.viewAll}>VIEW ALL</Text></View>
+        <View style={styles.sessions}>
+          {recentSessions.map((session) => <View key={session.day} style={styles.sessionCard}>
+            <View style={[styles.sessionDay, { backgroundColor: session.color }]}><Text style={styles.sessionDayText}>{session.day}</Text></View>
+            <View style={styles.sessionInfo}><Text style={styles.sessionTitle}>{session.title}</Text><Text style={styles.sessionMeta}>{session.duration} · {session.volume}</Text></View>
+            <Text style={styles.chevron}>›</Text>
+          </View>)}
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  scrollView: {
-    flex: 1,
-  },
-  contentContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-  container: {
-    maxWidth: MaxContentWidth,
-    flexGrow: 1,
-  },
-  titleContainer: {
-    gap: Spacing.three,
-    alignItems: 'center',
-    paddingHorizontal: Spacing.four,
-    paddingVertical: Spacing.six,
-  },
-  centerText: {
-    textAlign: 'center',
-  },
-  pressed: {
-    opacity: 0.7,
-  },
-  linkButton: {
-    flexDirection: 'row',
-    paddingHorizontal: Spacing.four,
-    paddingVertical: Spacing.two,
-    borderRadius: Spacing.five,
-    justifyContent: 'center',
-    gap: Spacing.one,
-    alignItems: 'center',
-  },
-  sectionsWrapper: {
-    gap: Spacing.five,
-    paddingHorizontal: Spacing.four,
-    paddingTop: Spacing.three,
-  },
-  collapsibleContent: {
-    alignItems: 'center',
-  },
-  imageTutorial: {
-    width: '100%',
-    aspectRatio: 296 / 171,
-    borderRadius: Spacing.three,
-    marginTop: Spacing.two,
-  },
-  imageReact: {
-    width: 100,
-    height: 100,
-    alignSelf: 'center',
-  },
+  safeArea: { flex: 1, backgroundColor: '#F6F7F3' },
+  content: { paddingHorizontal: 20, paddingTop: 23, paddingBottom: 132 },
+  eyebrow: { color: '#758078', fontSize: 10, letterSpacing: 1.2, fontWeight: '900', marginBottom: 7 },
+  title: { color: '#18241E', fontSize: 34, letterSpacing: -1.1, fontWeight: '800' },
+  subtitle: { color: '#77827B', fontSize: 13, marginTop: 4, marginBottom: 24 },
+  streakCard: { backgroundColor: '#203F2D', borderRadius: 22, minHeight: 132, padding: 20, flexDirection: 'row', alignItems: 'center', overflow: 'hidden', marginBottom: 28 },
+  streakNumber: { color: '#D5EE53', fontSize: 42, fontWeight: '900', lineHeight: 45, letterSpacing: -1.5 },
+  streakLabel: { color: '#B2C7B6', fontSize: 9, letterSpacing: 1, fontWeight: '900', marginTop: 2 },
+  streakCopy: { flex: 1, marginLeft: 20 },
+  streakTitle: { color: '#FFF', fontSize: 15, fontWeight: '800', lineHeight: 20 },
+  streakBody: { color: '#C1D0C3', fontSize: 11, lineHeight: 16, marginTop: 5 },
+  streakFlame: { position: 'absolute', right: 15, top: -13, color: '#487255', fontSize: 93 },
+  sectionTitle: { fontSize: 18, fontWeight: '800', color: '#18241E', letterSpacing: -0.4 },
+  chartCard: { backgroundColor: '#FFF', borderRadius: 20, marginTop: 14, padding: 17, borderWidth: 1, borderColor: '#EDEFEA', marginBottom: 29 },
+  chartHeader: { flexDirection: 'row', justifyContent: 'space-between' },
+  chartLabel: { color: '#7A857D', fontWeight: '900', fontSize: 10, letterSpacing: 1 },
+  chartValue: { color: '#244A2E', fontSize: 16, fontWeight: '900' },
+  chartArea: { height: 116, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end', borderBottomWidth: 1, borderColor: '#E9EDE8', paddingTop: 19 },
+  bar: { width: 22, borderRadius: 6, backgroundColor: '#DCE7D5' },
+  activeBar: { backgroundColor: '#4B8543' },
+  chartFooter: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 },
+  chartAxis: { color: '#9BA39D', fontSize: 9, fontWeight: '700' },
+  chartGain: { color: '#4A8740', fontSize: 10, fontWeight: '900' },
+  sectionHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  viewAll: { color: '#4E7F42', fontWeight: '900', fontSize: 10, letterSpacing: 0.7 },
+  sessions: { gap: 9, marginTop: 13 },
+  sessionCard: { padding: 13, borderRadius: 16, backgroundColor: '#FFF', flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderColor: '#EDEFEA' },
+  sessionDay: { width: 44, height: 44, borderRadius: 13, alignItems: 'center', justifyContent: 'center' },
+  sessionDayText: { color: '#40523F', fontSize: 10, fontWeight: '900', letterSpacing: 0.5 },
+  sessionInfo: { flex: 1, marginLeft: 12 },
+  sessionTitle: { color: '#26332A', fontSize: 14, fontWeight: '800', marginBottom: 4 },
+  sessionMeta: { color: '#828B84', fontSize: 11 },
+  chevron: { color: '#809087', fontSize: 27, fontWeight: '300' },
 });
