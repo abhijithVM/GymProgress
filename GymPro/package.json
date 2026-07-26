@@ -1,10 +1,8 @@
 {
-  "name": "firstapp",
+  "name": "GymPro",
   "main": "expo-router/entry",
   "version": "1.0.0",
   "dependencies": {
-    "@expo/ui": "~57.0.7",
-    "expo": "~57.0.7",
     "expo-constants": "~57.0.6",
     "expo-device": "~57.0.1",
     "expo-font": "~57.0.1",
