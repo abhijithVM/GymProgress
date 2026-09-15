@@ -1,0 +1,4 @@
+import { Link } from 'react-router-dom';
+import { Card, PageTitle } from '../components/UI.jsx';
+import { useGym } from '../context/GymContext.jsx';
+export default function Workouts() { const { workouts, toggleExercise } = useGym(); return <><PageTitle eyebrow="TRAINING LOG" title="Workouts"><Link className="button" to="/add-workout">+ Add workout</Link></PageTitle><div className="stack">{workouts.map((workout) => <Card key={workout.id}><div className="card-header"><div><h2>{workout.name}</h2><p>{workout.date}</p></div><small>{workout.exercises.length} exercises</small></div><div className="exercise-list">{workout.exercises.map((exercise) => <button onClick={() => toggleExercise(workout.id, exercise.id)} className={exercise.completed ? 'exercise done' : 'exercise'} key={exercise.id}>{exercise.completed ? '✓' : '○'} <span>{exercise.name}</span><small>{exercise.sets} × {exercise.reps} · {exercise.weight} kg</small></button>)}</div></Card>)}</div></>; }
